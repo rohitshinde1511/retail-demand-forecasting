@@ -1,31 +1,29 @@
 import pandas as pd
+import os
 
-print("Script started")
+def load_data(relative_path):
+    """
+    Load CSV data using a path relative to the project root.
+    Works in both local and Streamlit Cloud environments.
+    """
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    full_path = os.path.join(base_dir, relative_path)
 
-def load_data(path):
-    print("Loading CSV...")
-    df = pd.read_csv(path)
+    df = pd.read_csv(full_path)
 
-    print("Original columns:", df.columns)
-
-    # standardize column names
+    # Standardize column names
     df.columns = df.columns.str.lower()
 
-    # fix date parsing (DD-MM-YYYY)
-    if 'date' in df.columns:
-        df['date'] = pd.to_datetime(df['date'], dayfirst=True)
+    # Parse date
+    if "date" in df.columns:
+        df["date"] = pd.to_datetime(df["date"], dayfirst=True)
     else:
         raise ValueError("No date column found")
 
-    # standardize sales column
-    if 'weekly_sales' in df.columns:
-        df.rename(columns={'weekly_sales': 'sales'}, inplace=True)
-    elif 'sales' not in df.columns:
+    # Standardize sales column
+    if "weekly_sales" in df.columns:
+        df.rename(columns={"weekly_sales": "sales"}, inplace=True)
+    elif "sales" not in df.columns:
         raise ValueError("No sales column found")
 
     return df
-
-if __name__ == "__main__":
-    print("Main block running")
-    df = load_data("data/raw/sales.csv")
-    print(df.head())
