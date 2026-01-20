@@ -2,8 +2,9 @@ import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
 
-from data_loader import load_data
-from features import create_features
+from src.data_loader import load_data
+from src.features import create_features
+
 
 
 def train_model():

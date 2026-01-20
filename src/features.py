@@ -28,11 +28,10 @@ def create_features(df):
         .std()
     )
 
-    # --- Holiday flag already exists ---
-    # Keep it as-is for modeling
+    # --- Holiday flag ---
     df["holiday_flag"] = df["holiday_flag"].astype(int)
 
-    # Drop rows with missing feature values (created by shifting)
+    # Drop rows with missing feature values
     df = df.dropna().reset_index(drop=True)
 
     return df
