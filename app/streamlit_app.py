@@ -59,6 +59,12 @@ if current_inventory > 200_000:
     )
 
 
+st.caption(
+    "Click to generate a one-week demand forecast and inventory reorder recommendation "
+    "for the selected store."
+)
+
+
 if st.button("Predict Demand"):
     with st.spinner("Generating forecast..."):
         forecast, reorder_qty = forecast_next_week(
@@ -67,6 +73,8 @@ if st.button("Predict Demand"):
         )
 
     st.success("Prediction completed")
+    
+    st.subheader("📊 Forecast & Inventory Decision")
 
     st.metric(
     label="📈 Forecasted Weekly Demand",
@@ -80,5 +88,9 @@ if st.button("Predict Demand"):
     help="Suggested inventory to order based on forecast and current stock"
     )
 
+st.caption(
+    "This dashboard is a demonstration of a retail forecasting workflow and is not intended "
+    "for live production use."
+)
 
 
