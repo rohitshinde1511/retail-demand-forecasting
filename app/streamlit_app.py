@@ -14,6 +14,14 @@ st.set_page_config(
 
 st.title("📦 Retail Demand Forecasting & Decision System")
 
+st.info(
+    "ℹ️ This demo forecasts **weekly demand** using historical retail sales data.\n\n"
+    "- Valid Store IDs: **1–50**\n"
+    "- Inventory represents **current weekly on-hand stock (units)**\n"
+    "- Values outside realistic ranges are restricted for accuracy"
+)
+
+
 st.markdown(
     """
     Forecast next week's demand and receive inventory reorder recommendations
@@ -27,16 +35,29 @@ st.divider()
 store_id = st.number_input(
     "Store ID",
     min_value=1,
+    max_value=50,
     step=1,
-    value=1
+    value=1,
+    help="Select a valid store ID (1–50)"
 )
 
 current_inventory = st.number_input(
     "Current Inventory (units)",
     min_value=0,
-    step=1000,
-    value=50000
+    max_value=500_000,
+    step=1_000,
+    value=50_000,
+    help="Enter current weekly inventory (e.g., 20,000–100,000 units)"
 )
+
+
+# Logical validation
+if current_inventory > 200_000:
+    st.warning(
+        "⚠️ Inventory value is unusually high for weekly stock. "
+        "Please verify this is intentional."
+    )
+
 
 if st.button("Predict Demand"):
     with st.spinner("Generating forecast..."):
@@ -48,11 +69,16 @@ if st.button("Predict Demand"):
     st.success("Prediction completed")
 
     st.metric(
-        label="📈 Forecasted Weekly Demand",
-        value=f"{forecast:,.0f} units"
+    label="📈 Forecasted Weekly Demand",
+    value=f"{forecast:,.0f} units",
+    help="Predicted total units expected to be sold next week"
+    )
+    
+    st.metric(
+    label="📦 Recommended Reorder Quantity",
+    value=f"{reorder_qty:,.0f} units",
+    help="Suggested inventory to order based on forecast and current stock"
     )
 
-    st.metric(
-        label="📦 Recommended Reorder Quantity",
-        value=f"{reorder_qty:,.0f} units"
-    )
+
+
